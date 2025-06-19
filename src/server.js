@@ -34,8 +34,8 @@ setInterval(() => {
 io.on('connection', (socket) => {
   console.log(`Novo jogador conectado: ${socket.id}`)
 
-  socket.on('join', (name) => {
-    addPlayer(world, socket.id, name)
+  socket.on('join', (data) => {
+    addPlayer(world, socket.id, data)
     io.emit('worldUpdate', world)
   })
 
