@@ -2,14 +2,19 @@ const socket = io()
 
 let playerName = prompt("Digite seu nome:")
 if (!playerName) playerName = "Jogador"
-socket.emit('join', playerName)
+
+let gender = prompt('Sexo (male/female):', 'male')
+if (gender !== 'female') gender = 'male'
+const skinKey = gender === 'male' ? 'maleSkin1' : 'femaleSkin1'
+const hairKey = gender === 'male' ? 'maleHair1' : 'femaleHair1'
+const clothesKey = gender === 'male' ? 'maleClothes1' : 'femaleClothes1'
+
+socket.emit('join', { name: playerName, gender, skinKey, hairKey, clothesKey })
 
 const TILE_SIZE = 32
 const MAX_TILE_INDEX = 99 // Ajuste conforme o número de arquivos .png disponíveis
 
 let worldState = null
-let playerSprites = {}
-let zombieSprites = []
 let tileGroup
 
 socket.on('worldUpdate', (world) => {
@@ -37,15 +42,39 @@ function preload() {
     this.load.image(`tile_${indexStr}`, `assets/tiles/tile_${indexStr}.png`)
   }
 
-  // Sprites
-  this.load.image('player', 'assets/sprites/player.png')
-  this.load.image('zombie', 'assets/sprites/zombie.png')
+  // Sprites do personagem
+  this.load.image('maleSkin1', 'assets/sprites/Character-skin-colors/Male Skin1.png')
+  this.load.image('femaleSkin1', 'assets/sprites/Character-skin-colors/Female Skin1.png')
+  this.load.image('maleHair1', 'assets/sprites/Male-Hair/Male Hair1.png')
+  this.load.image('femaleHair1', 'assets/sprites/Female-Hair/Female Hair1.png')
+  this.load.image('maleClothes1', 'assets/sprites/Male-Clothing/Blue Shirt v2.png')
+  this.load.image('femaleClothes1', 'assets/sprites/Female-Clothing/Blue Corset v2.png')
+
+  // Zumbi como spritesheet para animações
+  this.load.spritesheet('zombieSheet', 'assets/sprites/Zombies/Zombie.png', {
+    frameWidth: 32,
+    frameHeight: 32,
+  })
 }
 
 function create() {
   tileGroup = this.add.group()
   this.players = {}
   this.zombies = []
+
+  this.anims.create({
+    key: 'zombieWalk',
+    frames: this.anims.generateFrameNumbers('zombieSheet', { start: 0, end: 3 }),
+    frameRate: 8,
+    repeat: -1,
+  })
+
+  this.anims.create({
+    key: 'zombieDie',
+    frames: this.anims.generateFrameNumbers('zombieSheet', { start: 4, end: 7 }),
+    frameRate: 6,
+    repeat: 0,
+  })
 
   this.input.keyboard.on('keydown', (event) => {
     const key = event.key.toLowerCase()
@@ -78,7 +107,12 @@ function update() {
 
   for (const id in worldState.players) {
     const p = worldState.players[id]
-    this.players[id] = this.add.image(p.x * TILE_SIZE + TILE_SIZE / 2, p.y * TILE_SIZE + TILE_SIZE / 2, 'player')
+    const container = this.add.container(p.x * TILE_SIZE + TILE_SIZE / 2, p.y * TILE_SIZE + TILE_SIZE / 2)
+    const body = this.add.image(0, 0, p.skinKey).setOrigin(0.5)
+    const hair = this.add.image(0, 0, p.hairKey).setOrigin(0.5)
+    const clothes = this.add.image(0, 0, p.clothesKey).setOrigin(0.5)
+    container.add([body, hair, clothes])
+    this.players[id] = container
   }
 
   // Limpa e redesenha zumbis
@@ -86,7 +120,8 @@ function update() {
   this.zombies = []
 
   for (const z of worldState.zombies) {
-    const zombie = this.add.image(z.x * TILE_SIZE + TILE_SIZE / 2, z.y * TILE_SIZE + TILE_SIZE / 2, 'zombie')
+    const zombie = this.add.sprite(z.x * TILE_SIZE + TILE_SIZE / 2, z.y * TILE_SIZE + TILE_SIZE / 2, 'zombieSheet')
+    zombie.play('zombieWalk')
     this.zombies.push(zombie)
   }
 }

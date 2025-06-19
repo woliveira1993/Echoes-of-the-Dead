@@ -1,28 +1,14 @@
-function initWorld() {
-  return {
-    players: {}
+function generateMap(width, height) {
+  const map = []
+  for (let y = 0; y < height; y++) {
+    const row = []
+    for (let x = 0; x < width; x++) {
+      const tileIndex = Math.floor(Math.random() * 100)
+      row.push({ tileIndex })
+    }
+    map.push(row)
   }
-}
-
-function addPlayer(world, id, name) {
-  world.players[id] = {
-    name,
-    x: 0,
-    y: 0,
-    hp: 100
-  }
-}
-
-function movePlayer(world, id, direction) {
-  const player = world.players[id]
-  if (!player) return
-
-  switch (direction) {
-    case 'up': player.y -= 1; break
-    case 'down': player.y += 1; break
-    case 'left': player.x -= 1; break
-    case 'right': player.x += 1; break
-  }
+  return map
 }
 
 function initWorld() {
@@ -33,26 +19,13 @@ function initWorld() {
   }
 }
 
-function generateMap(width, height) {
-  const map = []
-
-  for (let y = 0; y < height; y++) {
-    const row = []
-    for (let x = 0; x < width; x++) {
-      const tileIndex = Math.floor(Math.random() * 100) // 0 a 99
-      row.push({ tileIndex })
-    }
-    map.push(row)
-  }
-
-  return map
-}
-
-
-
-function addPlayer(world, id, name) {
+function addPlayer(world, id, data) {
   world.players[id] = {
-    name,
+    name: data.name,
+    gender: data.gender,
+    skinKey: data.skinKey,
+    hairKey: data.hairKey,
+    clothesKey: data.clothesKey,
     x: Math.floor(Math.random() * 10),
     y: Math.floor(Math.random() * 10),
     hp: 100,
@@ -110,4 +83,3 @@ module.exports = {
   spawnZombie,
   moveZombies,
 }
-
