@@ -1,0 +1,28 @@
+{
+  "name": "echoes-of-the-dead",
+  "version": "1.0.0",
+  "description": "Echoes of the Dead Game",
+  "main": "index.js",
+  "scripts": {
+     "start": "node src/server.js",
+      "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/woliveira1993/Echoes-of-the-Dead.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/woliveira1993/Echoes-of-the-Dead/issues"
+  },
+  "homepage": "https://github.com/woliveira1993/Echoes-of-the-Dead#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
