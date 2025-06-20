@@ -1,100 +1,166 @@
-# harvest-moon-phaser3-game
+# Phaser Webpack TypeScript Template
 
-[Click Here to Play The Game!](https://mimikim.github.io/harvest-moon-phaser3-game/)
+This is a Phaser 3 project template that uses webpack for bundling. It supports hot-reloading for quick development workflow, includes TypeScript support and scripts to generate production-ready builds.
 
-You are Jack. You inherited a large plot of land from your dead grandfather, which you have converted into a homestead to grow crops for the nearby town and provide a safe place for rescued farm animals to live.
+**[This Template is also available as a JavaScript version.](https://github.com/phaserjs/template-webpack)**
 
-You are getting ready for the upcoming festival and need to collect supplies for decorations and food. You will have 5 days to get everything together, with the festival happening on the 6th day. 
+### Versions
 
-In order to get everything you need, you will need to travel into the mountains and caves each day to search for items, as different items will spawn randomly on each day. However, all the items you need **will** spawn over the course of 5 days, so don't worry.
+This template has been updated for:
 
-Sometimes, you will need to run errands for townsfolk in order to get some items. You will also need to feed your animals daily. Helping townsfolk will increase their friendship and may influence what happens during the festival!
+- [Phaser 3.90.0](https://github.com/phaserjs/phaser)
+- [Webpack 5.99.6](https://github.com/webpack/webpack)
+- [TypeScript 5.4.5](https://github.com/microsoft/TypeScript)
 
-At the end of the game, you will be scored based on whether you completed your tasks, how happy your animals are, and how happy the townspeople are. Different events and dialogue may happen during the festival based on your score.
+![screenshot](screenshot.png)
 
-This is a pacifist game. You cannot use any animal products nor attack anyone. You will have the choice of being mean, but your score will be adversely affected with each mean action you choose. Your animals can be found roaming freely around the homestead, rather than trapped in cages. Helping out the forest spirits will give you useful boosts.
+## Requirements
 
-## Gameplay:
+[Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
 
-Using the Arrow Keys will move Jack around the map.
+## Available Commands
 
-Pressing "SHIFT" will bring up a list of tasks that need to be completed before the festival, as well as a list of your animals and their hungry/happy status. Animals will remain in their relative locations each day, so you don't have to worry about searching for them all over the map.
+| Command | Description |
+|---------|-------------|
+| `npm install` | Install project dependencies |
+| `npm run dev` | Launch a development web server |
+| `npm run build` | Create a production build in the `dist` folder |
+| `npm run dev-nolog` | Launch a development web server without sending anonymous data (see "About log.js" below) |
+| `npm run build-nolog` | Create a production build in the `dist` folder without sending anonymous data (see "About log.js" below) |
 
-Pressing "SPACE BAR" next to an item or animal or person will initiate the proper action, whether that is picking up an item, harvesting a crop or feeding an animal. No need to switch between equipped items like you would in the original game! Make sure you are facing the item you want to interact with.
+## Writing Code
 
-Pressing "ENTER" while facing a person, animal, or point-of-interest will initiate dialog.
+After cloning the repo, run `npm install` from your project directory. Then, you can start the local development server by running `npm run dev`.
 
-## Game Notes:
+The local development server runs on `http://localhost:8080` by default. Please see the webpack documentation if you wish to change this, or add SSL support.
 
-Overview:
+Once the server is running you can edit any of the files in the `src` folder. Webpack will automatically recompile your code and then reload the browser.
 
-|      |   cliff    |      |
-|------|------------|------|
-|      |  mountain  |      |
-| town | crossroads | farm |
+## Template Project Structure
 
-Both the Mountain and Farm maps contain access to Underground Caves. There are 2 different Cave maps.
+We have provided a default project structure to get you started. This is as follows:
 
-Herbs, flowers, and wild fruit will randomly spawn in the mountains and caves. Mushrooms only grow in the underground caves.
+| Path                         | Description                                                |
+|------------------------------|------------------------------------------------------------|
+| `public/index.html`          | A basic HTML page to contain the game.                     |
+| `public/assets`              | Game sprites, audio, etc. Served directly at runtime.      |
+| `public/style.css`           | Global layout styles.                                      |
+| `src/main.ts`                | Application bootstrap.                                     |
+| `src/game`                   | Folder containing the game code.                           |
+| `src/game/main.ts`           | Game entry point: configures and starts the game.          |
+| `src/game/scenes`            | Folder with all Phaser game scenes.                        |
 
-### Tasks
 
-Your list of tasks when first starting the game:
-- Collect 6 Berry of Wild Grapes
-- Collect 6 Summer fruits
-- Collect 10 Power berries
-- Find the lost baby cow (helps locate the hidden cave on the farm map and opens up new dialog with animals)
-- Collect 10 flowers of any kind (this will affect decorations during the festival)
+## Handling Assets
 
-Tasks you can get from townspeople:
-- Release captive fish back into the mountain springs
-- Pick a special flower from the mountain and deliver a love letter to Nina from a secret admirer
-- Collect 4 mushrooms and 3 poison mushrooms for the Fortune Teller
-- Collect food items (dumpling, croissant, riceball, and cake) from the townsfolk as a peace offering to the cave elves
-- Deliver 10 potatoes, 10 turnips, 10 corn, and 10 tomatoes to Ellen so that she can cook a veggie meal
+Webpack supports loading assets via JavaScript module `import` statements.
 
-Special tasks from the forest spirits:
-- Find and restore the Chicken Spirit statue (permanent walking speed boost)
-- Convince the forest loggers to leave the mountains (your choice affects festival events)
-- Plant seeds around the mountain where the elves are standing to help restore the forest (completion summons the Goddess, who will have her own task for you)
+This template provides support for both embedding assets and also loading them from a static folder. To embed an asset, you can import it at the top of the JavaScript file you are using it in:
 
-### Scores
-Scores range from 0-100, 100 being perfect.
+```js
+import logoImg from './assets/logo.png'
+```
 
-- Bad Ending: 0 - 25
-- Okay Ending: 26 - 50
-- Good Ending: 51 - 75
-- Great Ending: 76 - 99
-- Perfect Ending: 100
+To load static files such as audio files, videos, etc place them into the `public/assets` folder. Then you can use this path in the Loader calls within Phaser:
 
-In order to get the perfect score, you need to:
+```js
+preload ()
+{
+    //  This is an example of an imported bundled image.
+    //  Remember to import it at the top of this file
+    this.load.image('logo', logoImg);
 
-- Complete all tasks, as listed above (5 tasks for 5 points each, 25 total points possible)
-- Complete all townspeople tasks, as listed above (5 tasks for 5 points each, 25 total points possible)
-- Feed and talk to your animals daily (1 points for each animal, per day. 8 animals for 5 days for 40 points)
-    - 3 adult cows, 1 baby cows, 4 chickens
-- Complete all forest spirit tasks successfully. (3 tasks for 3 points each, then 1 more point on completion after blessing from the Goddess)
+    //  This is an example of loading a static image
+    //  from the public/assets folder:
+    this.load.image('background', 'assets/bg.png');
+}
+```
 
-## Developer Notes:
+When you issue the `npm run build` command, all static assets are automatically copied to the `dist/assets` folder.
 
-This game is my second time ever using the [Phaser 3](https://phaser.io/phaser3) game engine, the first time being for a Flash-to-HTML5 conversion project at work. I am making use of the [Phaser3 + Parcel Template](https://github.com/ourcade/phaser3-parcel-template) to bundle and build the game. I am using [Tiled](https://www.mapeditor.org/) to create each map.
+## Deploying to Production
 
-If spinning up the game locally, clone this repo and run `npm install`. Make sure you have **Node.JS**, **npm**, and **Parcel** installed. If you don't, install those first.
+After you run the `npm run build` command, your code will be built into a single bundle and saved to the `dist` folder, along with any other assets your project imported, or stored in the public assets folder.
 
-Running `npm run start`. will spin up a development instance, and running `npm run build` will create a production-ready copy.
+In order to deploy your game, you will need to upload *all* of the contents of the `dist` folder to a public facing web server.
 
-The production assets build into the `/docs/` folder so that it can be deployed via Github Pages. The URL path for the assets have been specifically set so that it works with this Github repo. When working locally, a folder called `/dist/` will be created. You can access this at: `http://localhost:8000/`
+## Customizing the Template
 
-Since the production build is to be work with Github Pages, the asset url paths are all prefixed with this repo name.
+### Babel
 
-This game concept has grown from a simple exercise to something more substantial, so I guess at some point I should figure out how to do save states...
+You can write modern ES6+ JavaScript and Babel will transpile it to a version of JavaScript that you want your project to support. The targeted browsers are set in the `.babelrc` file and the default currently targets all browsers with total usage over "0.25%" but excludes IE11 and Opera Mini.
 
-### Final Thoughts:
+ ```
+"browsers": [
+  ">0.25%",
+  "not ie 11",
+  "not op_mini all"
+]
+ ```
 
-So, obviously I love Harvest Moon because I have clearly spent an incredible amount of time turning these sprites into spritesheets.
+### Webpack
 
-Some character assets came from [The Spriters Resource](https://www.spriters-resource.com/snes/harvestmoon/), but many of them are not proportioned equally, so I had to take time to re-draw the sprites to make sure each pixel in each sprite was the correct size. The backgrounds or other items, such as the food items, nature items, and misc, come from directly ripping them with an emulator. I use ZSNES.
+If you want to customize your build, such as adding a new webpack loader or plugin (i.e. for loading CSS or fonts), you can modify the `webpack/config.*.js` file for cross-project changes, or you can modify and/or create new configuration files and target them in specific npm tasks inside of `package.json`. Please see the [Webpack documentation](https://webpack.js.org/) for more information.
 
-The tilemaps are all my own work, spending hours in [Tiled](https://www.mapeditor.org/) to create each map and layer. The tilesets could be done much more efficiently but that would mean needing to figure out how certain textures repeat, such as the ground/grass in the mountains or the ground on the farm. Presently, my concern is towards building out the game. On completion, I can circle back.
+## About log.js
 
-Please feel free to use these spritesheets in your own project! :slightly_smiling_face:
+If you inspect our node scripts you will see there is a file called `log.js`. This file makes a single silent API call to a domain called `gryzor.co`. This domain is owned by Phaser Studio Inc. The domain name is a homage to one of our favorite retro games.
+
+We send the following 3 pieces of data to this API: The name of the template being used (vue, react, etc). If the build was 'dev' or 'prod' and finally the version of Phaser being used.
+
+At no point is any personal data collected or sent. We don't know about your project files, device, browser or anything else. Feel free to inspect the `log.js` file to confirm this.
+
+Why do we do this? Because being open source means we have no visible metrics about which of our templates are being used. We work hard to maintain a large and diverse set of templates for Phaser developers and this is our small anonymous way to determine if that work is actually paying off, or not. In short, it helps us ensure we're building the tools for you.
+
+However, if you don't want to send any data, you can use these commands instead:
+
+Dev:
+
+```bash
+npm run dev-nolog
+```
+
+Build:
+
+```bash
+npm run build-nolog
+```
+
+Or, to disable the log entirely, simply delete the file `log.js` and remove the call to it in the `scripts` section of `package.json`:
+
+Before:
+
+```json
+"scripts": {
+    "dev": "node log.js dev & dev-template-script",
+    "build": "node log.js build & build-template-script"
+},
+```
+
+After:
+
+```json
+"scripts": {
+    "dev": "dev-template-script",
+    "build": "build-template-script"
+},
+```
+
+Either of these will stop `log.js` from running. If you do decide to do this, please could you at least join our Discord and tell us which template you're using! Or send us a quick email. Either will be super-helpful, thank you.
+
+## Join the Phaser Community!
+
+We love to see what developers like you create with Phaser! It really motivates us to keep improving. So please join our community and show-off your work 😄
+
+**Visit:** The [Phaser website](https://phaser.io) and follow on [Phaser Twitter](https://twitter.com/phaser_)<br />
+**Play:** Some of the amazing games [#madewithphaser](https://twitter.com/search?q=%23madewithphaser&src=typed_query&f=live)<br />
+**Learn:** [API Docs](https://newdocs.phaser.io), [Support Forum](https://phaser.discourse.group/) and [StackOverflow](https://stackoverflow.com/questions/tagged/phaser-framework)<br />
+**Discord:** Join us on [Discord](https://discord.gg/phaser)<br />
+**Code:** 2000+ [Examples](https://labs.phaser.io)<br />
+**Read:** The [Phaser World](https://phaser.io/community/newsletter) Newsletter<br />
+
+Created by [Phaser Studio](mailto:support@phaser.io). Powered by coffee, anime, pixels and love.
+
+The Phaser logo and characters are &copy; 2011 - 2025 Phaser Studio Inc.
+
+All rights reserved.
