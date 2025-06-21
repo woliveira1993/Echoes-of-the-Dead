@@ -1,7 +1,10 @@
 import { Scene } from 'phaser';
+import { loadSwordPlayerSprites } from '../player/sword/main';
+import { loadBowPlayerSprites } from '../player/bow/main';
 
 export class Preloader extends Scene
 {
+    player: any
     constructor ()
     {
         super('Preloader');
@@ -29,15 +32,16 @@ export class Preloader extends Scene
 
     preload ()
     {
-        this.load.image('tiles', './assets/map/centro.png')
-        this.load.tilemapTiledJSON('map', './assets/map/centro.json')
+        this.load.image('floor_tiles_map', './assets/map/floor.png')
+        this.load.image('wall_tiles_map', './assets/map/wall.png')
+        this.load.image('vegetation_tiles_map', './assets/map/vegetation.png')
+        this.load.tilemapTiledJSON('map', './assets/map/map.json')
+        loadBowPlayerSprites(this)
+        loadSwordPlayerSprites(this)
     }
 
     create ()
     {
-
-
-
         this.scene.start('MainMenu');
     }
 }
