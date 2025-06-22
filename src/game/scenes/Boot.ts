@@ -15,8 +15,8 @@ export class Boot extends Scene
         this.load.image('background', 'assets/bg.png');
         this.load.image('logo', 'assets/logo.png');
 
-        this.load.image('sword_character', 'assets/character/03_wShadow.png');
-        this.load.image('bow_character', 'assets/character/08_wShadow.png');
+        this.load.image('sword_character', 'assets/character/for_screens/08_wShadow.png');
+        this.load.image('bow_character', 'assets/character/for_screens/03_wShadow.png');
 
     }
 
